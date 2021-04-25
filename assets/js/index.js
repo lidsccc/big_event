@@ -9,14 +9,22 @@ $(function () {
             //     Authorization: localStorage.getItem('token')
             // },
             success: function (res) {
-                // console.log(res);
+                // console.log(res);  此处为服务器返回的数据
                 //判断是否获取成功
                 if (res.status !== 0) {
                     return layui.layer.msg('获取用户信息失败')
                 }
                 //开始渲染用户信息
                 showUserInfo(res.data)
-            }
+            },
+            // //无论成功还是失败都会调用
+            // complete: function (res) {
+            //     //console.log(res); //此处为ajax返回对象
+            //     if (res.responseJSON.status === 1 && res.responseJSON.message === '身份认证失败！') {
+            //         localStorage.removeItem('token')
+            //         location.href = '/login.html'
+            //     }
+            // }
         })
     }
     getUserInfo()
@@ -37,4 +45,17 @@ $(function () {
             $('.layui-nav-img').hide()
         }
     }
+    var layer = layui.layer
+    //退出功能
+    $('#logout').on('click', function () {
+        layer.confirm('确定要退出吗?', {
+            icon: 3,
+            title: '提示'
+        }, function (index) {
+            //确定之后的回调函数
+            localStorage.removeItem('token')
+            location.href = '/login.html'
+            layer.close(index);
+        });
+    })
 })
